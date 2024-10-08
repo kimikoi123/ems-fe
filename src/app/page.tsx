@@ -1,5 +1,10 @@
-import Image from "next/image";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return <div>Hello WORLD</div>;
+export default async function Home() {
+  // TODO: Replace with auth logic
+  const isAuthenticated = false;
+
+  if (!isAuthenticated) {
+    redirect("/login");
+  }
 }
