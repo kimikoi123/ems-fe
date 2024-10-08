@@ -1,6 +1,6 @@
 import React from "react";
 
-const AddEditForm = () => {
+const AddEditUserForm = () => {
   //   const handleSubmit = (e: React.SyntheticEvent) => {
   //     e.preventDefault();
   //     // TODO: Handle Add user functionality here
@@ -26,7 +26,21 @@ const AddEditForm = () => {
           />
         </div>
         <div className="flex flex-col">
-          <label>Phone</label>
+          <label>Middle Name</label>
+          <input
+            className="outline-none border rounded-lg bg-transparent p-2"
+            type="text"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label>Preferred Name</label>
+          <input
+            className="outline-none border rounded-lg bg-transparent p-2"
+            type="text"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label>Phone Number</label>
           <input
             className="outline-none border rounded-lg bg-transparent p-2"
             type="text"
@@ -54,11 +68,22 @@ const AddEditForm = () => {
           />
         </div>
         <div className="flex flex-col">
-          <label>Country</label>
+          <label>Address</label>
           <input
             className="outline-none border rounded-lg bg-transparent p-2"
             type="text"
           />
+        </div>
+        <div className="flex flex-col">
+          <label>User Type</label>
+          <select className="outline-none border rounded-lg bg-transparent p-2">
+            <option value="" disabled>
+              -- Select an option --
+            </option>
+            <option value="admin">Administrator</option>
+            <option value="employee">Employee</option>
+            <option value="candidate">Candidate</option>
+          </select>
         </div>
 
         <button
@@ -72,4 +97,4 @@ const AddEditForm = () => {
   );
 };
 
-export default AddEditForm;
+export default AddEditUserForm;
