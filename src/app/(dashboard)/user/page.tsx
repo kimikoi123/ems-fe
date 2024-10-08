@@ -41,6 +41,7 @@ const mockUsers: User[] = [
   },
 ];
 
+//Move this to components as UserCard
 const UserCard = ({ userData }: { userData: User }) => {
   return (
     <div className="flex gap-4">
