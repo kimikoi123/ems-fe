@@ -26,7 +26,7 @@ const Login = () => {
 
     if (isEmailValid && password) {
       //TODO: Implement auth validation
-      router.push("/dashboard");
+      router.push("/user");
     } else {
       //TODO: Implement password fail styling
       console.log("Invalid email or password");
