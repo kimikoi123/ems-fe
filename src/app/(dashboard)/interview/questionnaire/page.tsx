@@ -197,16 +197,23 @@ const questions: Question[] = [
 ];
 
 interface QuestionnaireProps {
-  hasAnswered?: boolean;
+  params: {
+    hasAnswered?: boolean;
+  };
 }
 
-const Questionnaire: React.FC<QuestionnaireProps> = ({ hasAnswered }) => {
+const Questionnaire: React.FC<QuestionnaireProps> = ({
+  params,
+}: QuestionnaireProps) => {
+  const { hasAnswered } = params;
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState(
     Array(questions.length).fill(null)
   );
+
   if (hasAnswered) {
-    return <Interview hasAnswered />;
+    return <Interview params={{ hasAnswered: true }} />;
   }
 
   const handleOptionSelect = (option: string) => {
