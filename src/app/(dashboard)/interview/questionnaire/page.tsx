@@ -209,7 +209,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState(
-    Array(questions.length).fill(null)
+    Array(questions.length).fill(null),
   );
 
   if (hasAnswered) {
