@@ -46,7 +46,7 @@ const UserCard = ({ userData }: { userData: User }) => {
   return (
     <div className="flex gap-4">
       <div className="w-[100px] h-[100px] bg-cyan-300 rounded-lg" />
-      <div>
+      <div className="flex-1">
         <h1 className="text-lg font-bold">
           {userData.firstName} {userData.lastName}
         </h1>
@@ -54,13 +54,12 @@ const UserCard = ({ userData }: { userData: User }) => {
 
         <div>{userData.email}</div>
         <div>{userData.phoneNumber}</div>
-        {/* TODO: Fix style and structure */}
-        <Link href={`/user/${userData.id}`}>
-          <button className="bg-blue-500 text-white p-2 rounded">
-            Edit Details
-          </button>
-        </Link>
       </div>
+      <Link href={`/user/${userData.id}`}>
+        <button className="bg-blue-500 text-white p-2 rounded">
+          Edit Details
+        </button>
+      </Link>
     </div>
   );
 };
@@ -77,7 +76,7 @@ const UserPage = () => {
           + ADD USER
         </Link>
       </div>
-      <div className="mt-4 flex flex-col gap-4">
+      <div className="mt-8 flex flex-col gap-4">
         {mockUsers.map((user) => (
           <UserCard key={user.id} userData={user} />
         ))}
