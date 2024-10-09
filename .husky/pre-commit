@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/h"
+
+# Run format and lint before commit
+npm run format
+npm run lint

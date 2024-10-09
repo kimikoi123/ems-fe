@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/h"
+
+# Run lint and build before pushing code
+
+npm run lint
+npm run build
