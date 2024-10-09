@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const navs = [
@@ -33,10 +33,20 @@ const NavComponent = ({
 };
 
 const Sidebar = () => {
-  const [selectedNav, setSelectedNav] = useState("USER");
+  const [selectedNav, setSelectedNav] = useState("");
+
+  //TODO: Move this to state handler instead of local storage or get pathName and map
+  useEffect(() => {
+    const storedNav = localStorage.getItem("selectedNav");
+    if (storedNav) {
+      setSelectedNav(storedNav);
+    }
+  }, []);
 
   const handleClickNav = (nav: string) => {
     setSelectedNav(nav);
+    //TODO: Move this to state handler instead of local storage
+    localStorage.setItem("selectedNav", nav);
   };
 
   return (
