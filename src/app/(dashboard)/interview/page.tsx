@@ -18,8 +18,8 @@ const Interview: React.FC<InterviewProps> = ({ hasAnswered }) => {
             This questionnaire is designed to assess your skills and knowledge.
             Please take your time, read the questions carefully, and answer to
             the best of your ability. Your total time answering this
-            questionnaire will be monitored, so ensure you're in a quiet and
-            comfortable environment before starting.
+            questionnaire will be monitored, so ensure you&apos;re in a quiet
+            and comfortable environment before starting.
           </p>
           <p className="text-lg text-gray-700 mb-8">
             This multiple-choice questionnaire is designed to assess your
@@ -40,8 +40,8 @@ const Interview: React.FC<InterviewProps> = ({ hasAnswered }) => {
           <p className="text-lg text-gray-700 mb-6">
             Thank you for completing the questionnaire. Your answers have been
             successfully submitted and are currently being reviewed. We
-            appreciate the time and effort you've taken to share your thoughts
-            and skills with us.
+            appreciate the time and effort you&apos;ve taken to share your
+            thoughts and skills with us.
           </p>
 
           <p className="text-lg text-gray-700 mb-8">

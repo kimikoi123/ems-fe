@@ -201,14 +201,13 @@ interface QuestionnaireProps {
 }
 
 const Questionnaire: React.FC<QuestionnaireProps> = ({ hasAnswered }) => {
-  if (hasAnswered) {
-    return <Interview hasAnswered />;
-  }
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState(
     Array(questions.length).fill(null)
   );
+  if (hasAnswered) {
+    return <Interview hasAnswered />;
+  }
 
   const handleOptionSelect = (option: string) => {
     const updatedSelectedOptions = [...selectedOptions];
