@@ -1,13 +1,15 @@
 import React from "react";
 import Link from "next/link";
 
-//TODO: Check in backend if user has already answered and pass in props
-// On initial login we need to fetch this data and save to global state
 interface InterviewProps {
-  hasAnswered?: boolean;
+  params: {
+    hasAnswered?: boolean;
+  };
 }
 
-const Interview: React.FC<InterviewProps> = ({ hasAnswered }) => {
+const Interview: React.FC<InterviewProps> = ({ params }: InterviewProps) => {
+  const { hasAnswered } = params;
+
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
       <h1 className="font-bold text-2xl mb-6">Job Interview Questionnaire</h1>
