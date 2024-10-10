@@ -8,15 +8,14 @@ interface ModalProps {
   onClose: () => void;
   children: ReactNode;
 }
-
-export default function Modal({
+const Modal = ({
   isOpen,
   confirmText = "Confirm", // Default value
   cancelText = "Cancel", // Default value
   onConfirm,
   onClose,
   children,
-}: ModalProps) {
+}: ModalProps) => {
   if (!isOpen) return null;
 
   return (
@@ -46,4 +45,6 @@ export default function Modal({
       </div>
     </div>
   );
-}
+};
+
+export default Modal;
