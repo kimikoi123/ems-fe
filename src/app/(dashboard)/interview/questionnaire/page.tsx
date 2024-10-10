@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Interview from "../page";
-
+import Modal from "@/components/modal/Modal";
 interface Question {
   question: string;
   options: string[];
@@ -206,11 +207,13 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
   params,
 }: QuestionnaireProps) => {
   const { hasAnswered } = params;
+  const router = useRouter();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState(
     Array(questions.length).fill(null),
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (hasAnswered) {
     return <Interview params={{ hasAnswered: true }} />;
@@ -223,7 +226,9 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
+    if (currentQuestionIndex === questions.length - 1) {
+      setIsModalOpen(true); // Open modal when last question is reached and Finish is clicked
+    } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
@@ -232,6 +237,11 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
+  };
+
+  const handleSubmit = () => {
+    setIsModalOpen(false);
+    router.push("/interview");
   };
 
   return (
@@ -268,16 +278,40 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
         </button>
         <button
           onClick={handleNext}
-          className={`px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 ${
-            currentQuestionIndex === questions.length - 1
-              ? "opacity-50 cursor-not-allowed"
-              : ""
-          }`}
-          disabled={currentQuestionIndex === questions.length - 1}
+          className={`px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400`}
         >
-          Next
+          {currentQuestionIndex === questions.length - 1 ? "Finish" : "Next"}
         </button>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleSubmit}
+      >
+        <div className="pb-4">
+          <h3 className="text-xl font-semibold">Submit your answers?</h3>
+        </div>
+        {selectedOptions.includes(null) ? (
+          <div>
+            <p className="pb-2">
+              You haven&apos;t answered the following questions:
+            </p>
+            <ul className="list-disc list-inside">
+              {selectedOptions.map((option, index) =>
+                option === null ? (
+                  <li key={index}>Question {index + 1}</li>
+                ) : null,
+              )}
+            </ul>
+            <p className="pt-2">
+              Are you sure you want to submit your answers?
+            </p>
+          </div>
+        ) : (
+          <p>Are you sure you want to submit your answers?</p>
+        )}
+      </Modal>
     </div>
   );
 };
