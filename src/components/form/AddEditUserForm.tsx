@@ -1,8 +1,9 @@
 "use client";
 
+import { API_CONFIG } from "@/app/constants/config";
+import { User } from "@/app/interfaces/user";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-
-import { User } from "@/app/(dashboard)/user/page";
 
 interface AddEditUserFormProps {
   user?: User;
@@ -17,10 +18,10 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
     preferredName: "",
     phoneNumber: "",
     dateOfBirth: "",
-    gender: "",
-    email: "",
-    address: "",
-    userType: "",
+    gender: true,
+    emailAddress: "",
+    homeAddress: "",
+    role: "",
   });
 
   useEffect(() => {
@@ -33,29 +34,44 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
         preferredName: user.preferredName || "",
         phoneNumber: user.phoneNumber || "",
         dateOfBirth: user.dateOfBirth || "",
-        gender: user.gender || "",
-        email: user.email || "",
-        address: user.address || "",
-        userType: user.userType || "",
+        gender: user.gender || true,
+        emailAddress: user.emailAddress || "",
+        homeAddress: user.homeAddress || "",
+        role: user.role || "",
       });
     }
   }, [user]);
 
+  const handleGender = (name: string, value: string): string | boolean =>
+    name === "gender" ? value === "true" : value;
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: handleGender(name, value),
     }));
+  };
+
+  const handleAddUser = async (): Promise<void> => {
+    await axios.post(`${API_CONFIG.url}/users`, formData);
+  };
+
+  const handleEditUser = async (): Promise<void> => {
+    await axios.put(`${API_CONFIG.url}/user/${formData.id}`, formData);
   };
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    // TODO: Handle Add user functionality here
-    console.log("SUBMITTED");
+
+    if (formData.id === 0) {
+      return handleAddUser();
+    }
+
+    handleEditUser();
   };
 
   return (
@@ -126,24 +142,32 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
         </div>
         <div className="flex flex-col">
           <label>Gender</label>
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            className="outline-none border rounded-lg bg-transparent p-2"
-          >
-            <option value="" disabled>
-              -- Select an option --
-            </option>
-            <option value="admin">Male</option>
-            <option value="employee">Female</option>
-          </select>
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              name="gender"
+              value="true"
+              checked={formData.gender === true}
+              onChange={handleChange}
+            />
+            Male
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              name="gender"
+              value="false"
+              checked={formData.gender === false}
+              onChange={handleChange}
+            />
+            Female
+          </label>
         </div>
         <div className="flex flex-col">
           <label>Email</label>
           <input
-            name="email"
-            value={formData.email}
+            name="emailAddress"
+            value={formData.emailAddress}
             onChange={handleChange}
             className="outline-none border rounded-lg bg-transparent p-2"
             type="email"
@@ -152,18 +176,18 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
         <div className="flex flex-col">
           <label>Address</label>
           <input
-            name="address"
-            value={formData.address}
+            name="homeAddress"
+            value={formData.homeAddress}
             onChange={handleChange}
             className="outline-none border rounded-lg bg-transparent p-2"
             type="text"
           />
         </div>
         <div className="flex flex-col">
-          <label>User Type</label>
+          <label>Role</label>
           <select
-            name="userType"
-            value={formData.userType}
+            name="role"
+            value={formData.role}
             onChange={handleChange}
             className="outline-none border rounded-lg bg-transparent p-2"
           >

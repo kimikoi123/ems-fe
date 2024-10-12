@@ -1,47 +1,11 @@
-import React from "react";
+"use client";
+
+import { API_CONFIG } from "@/app/constants/config";
+import { User } from "@/app/interfaces/user";
+import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-//TODO: Move this in interfaces folder. Properties need to be changed once api comes
-export interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  middleName?: string;
-  preferredName?: string;
-  email: string;
-  phoneNumber?: string;
-  dateOfBirth?: string;
-  gender?: string;
-  address?: string;
-  userType?: string;
-}
-
-//TODO: Need to paginate users and pass only the needed data. No need to pass full as we can do another backend call for every user detail on edit user page
-const mockUsers: User[] = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe1",
-    email: "johndoe1@email.com",
-    phoneNumber: "+6376961481",
-  },
-  {
-    id: 2,
-    firstName: "John",
-    lastName: "Doe2",
-    email: "johndoe2@email.com",
-    phoneNumber: "+6376961482",
-  },
-  {
-    id: 3,
-    firstName: "John",
-    lastName: "Doe3",
-    email: "johndoe3@email.com",
-    phoneNumber: "+6376961483",
-  },
-];
-
-//Move this to components as UserCard
 const UserCard = ({ userData }: { userData: User }) => {
   return (
     <div className="flex gap-4">
@@ -52,7 +16,7 @@ const UserCard = ({ userData }: { userData: User }) => {
         </h1>
         <div>Employee #{userData.id}</div>
 
-        <div>{userData.email}</div>
+        <div>{userData.emailAddress}</div>
         <div>{userData.phoneNumber}</div>
       </div>
       <Link href={`/user/${userData.id}`}>
@@ -65,6 +29,29 @@ const UserCard = ({ userData }: { userData: User }) => {
 };
 
 const UserPage = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(`${API_CONFIG.url}/users`);
+        setUsers(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Error");
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  if (loading) return <p>Loading users...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -77,7 +64,7 @@ const UserPage = () => {
         </Link>
       </div>
       <div className="mt-8 flex flex-col gap-4">
-        {mockUsers.map((user) => (
+        {users.map((user) => (
           <UserCard key={user.id} userData={user} />
         ))}
       </div>
