@@ -1,3 +1,3 @@
 export const API_CONFIG = {
-  url: "http://localhost:3000/api",
+  url: "https://ems-be-m358.onrender.com/api",
 };
