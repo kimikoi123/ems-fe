@@ -6,8 +6,8 @@ export interface User {
   preferredName?: string;
   emailAddress: string;
   phoneNumber?: string;
-  dateOfBirth?: Date;
-  gender?: boolean;
+  dateOfBirth?: string;
+  gender: boolean;
   homeAddress?: string;
-  role?: string;
+  role: string;
 }
