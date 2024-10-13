@@ -35,12 +35,12 @@ const Sidebar = () => {
 
   useEffect(() => {
     const sortedNavs = [...navs].sort(
-      (a, b) => b.pathname.length - a.pathname.length
+      (a, b) => b.pathname.length - a.pathname.length,
     );
 
     const currentNav = sortedNavs.find(
       (nav) =>
-        pathname === nav.pathname || pathname.startsWith(nav.pathname + "/")
+        pathname === nav.pathname || pathname.startsWith(nav.pathname + "/"),
     );
 
     if (currentNav) {
