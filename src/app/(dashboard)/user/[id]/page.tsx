@@ -18,7 +18,7 @@ const EditUser = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
-          `${API_CONFIG.url}/user/${params?.id}`
+          `${API_CONFIG.url}/user/${params?.id}`,
         );
         setUser(response.data);
         setLoading(false);
