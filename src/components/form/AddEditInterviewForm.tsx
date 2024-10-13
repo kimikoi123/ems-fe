@@ -35,7 +35,7 @@ const AddEditInterviewForm: React.FC<AddEditInterviewFormProps> = ({
         total: questionnaire.total || 1,
       });
       setQuestions(
-        questionnaire.questions || [{ question: "", options: [""] }]
+        questionnaire.questions || [{ question: "", options: [""] }],
       );
     }
   }, [questionnaire]);
@@ -43,7 +43,7 @@ const AddEditInterviewForm: React.FC<AddEditInterviewFormProps> = ({
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
 
@@ -62,7 +62,7 @@ const AddEditInterviewForm: React.FC<AddEditInterviewFormProps> = ({
   const handleOptionChange = (
     questionIndex: number,
     optionIndex: number,
-    value: string
+    value: string,
   ) => {
     const updatedQuestions = [...questions];
     updatedQuestions[questionIndex].options[optionIndex] = value;
