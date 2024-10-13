@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import QuestionnaireCard from "@/components/questionnaireCard/QuestionnaireCard";
+import QuestionnaireCard from "@/components/card/questionnaireCard/QuestionnaireCard";
 import { Questionnaire } from "@/app/interfaces/questionnaire";
 
 const mockQuestionnaire: Questionnaire[] = [
