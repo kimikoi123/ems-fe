@@ -1,31 +1,28 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const navs = [
   { title: "USER", pathname: "/user" },
   { title: "INTERVIEW", pathname: "/interview" },
+  // TODO: Remove and decide how to navigate to this page
+  { title: "INTERVIEW SETUP", pathname: "/interview/setup" },
   { title: "SCHEDULING", pathname: "/scheduling" },
 ];
 
 interface NavComponentProps {
   nav: { title: string; pathname: string };
   isSelected: boolean;
-  handleClickNav: (nav: string) => void;
 }
 
-const NavComponent = ({
-  nav,
-  isSelected,
-  handleClickNav,
-}: NavComponentProps) => {
+const NavComponent = ({ nav, isSelected }: NavComponentProps) => {
   return (
     <Link
       href={nav.pathname}
       className={`${
         isSelected ? "bg-indigo-500 text-white" : ""
       } cursor-pointer p-2 rounded-lg font-semibold`}
-      onClick={() => handleClickNav(nav.title)}
     >
       {nav.title}
     </Link>
@@ -33,28 +30,29 @@ const NavComponent = ({
 };
 
 const Sidebar = () => {
+  const pathname = usePathname();
   const [selectedNav, setSelectedNav] = useState("");
 
-  //TODO: Move this to state handler instead of local storage or get pathName and map
   useEffect(() => {
-    const storedNav = localStorage.getItem("selectedNav");
-    if (storedNav) {
-      setSelectedNav(storedNav);
-    }
-  }, []);
+    const sortedNavs = [...navs].sort(
+      (a, b) => b.pathname.length - a.pathname.length,
+    );
 
-  const handleClickNav = (nav: string) => {
-    setSelectedNav(nav);
-    //TODO: Move this to state handler instead of local storage
-    localStorage.setItem("selectedNav", nav);
-  };
+    const currentNav = sortedNavs.find(
+      (nav) =>
+        pathname === nav.pathname || pathname.startsWith(nav.pathname + "/"),
+    );
+
+    if (currentNav) {
+      setSelectedNav(currentNav.title);
+    }
+  }, [pathname]);
 
   return (
     <div className="w-[200px] flex flex-col">
       {navs.map((nav, index) => (
         <NavComponent
           key={index}
-          handleClickNav={handleClickNav}
           isSelected={selectedNav === nav.title}
           nav={nav}
         />
