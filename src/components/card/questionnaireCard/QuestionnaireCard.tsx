@@ -34,7 +34,7 @@ const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({
             </td>
             <td className="border px-4 py-2">{questionnaireData.total}</td>
             <td className="border px-4 py-2">
-              <Link href={`/questionnaire/setup/${questionnaireData.id}`}>
+              <Link href={`/interview/setup/${questionnaireData.id}`}>
                 <button className="bg-blue-500 text-white p-2 rounded">
                   Edit Questionnaire
                 </button>

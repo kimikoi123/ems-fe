@@ -36,7 +36,7 @@ const QuestionnaireSetupPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">INTERVIEW SETUP PAGE</h1>
         <Link
-          href="/user/add"
+          href="/interview/setup/add"
           className="bg-indigo-500 text-white p-2 rounded-lg font-semibold"
         >
           + ADD QUESTIONNAIRE
