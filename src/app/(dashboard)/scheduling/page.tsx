@@ -20,12 +20,12 @@ const SCHEDULING: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState<Partial<EventInput> | null>(
-    null
+    null,
   );
 
   const openModal = (event?: Partial<EventInput>) => {
     setCurrentEvent(
-      event || { title: "", start: new Date(), end: new Date(), allDay: false }
+      event || { title: "", start: new Date(), end: new Date(), allDay: false },
     );
     setIsModalOpen(true);
   };
@@ -35,8 +35,8 @@ const SCHEDULING: React.FC = () => {
       if (currentEvent.id) {
         setEvents((prev) =>
           prev.map((evt) =>
-            evt.id === currentEvent.id ? { ...evt, ...currentEvent } : evt
-          )
+            evt.id === currentEvent.id ? { ...evt, ...currentEvent } : evt,
+          ),
         );
       } else {
         const newEvent = { ...currentEvent, id: `${Date.now()}` };
