@@ -23,6 +23,9 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
     homeAddress: "",
     role: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 
   useEffect(() => {
     if (user) {
@@ -42,17 +45,39 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
     }
   }, [user]);
 
-  const handleGender = (name: string, value: string): string | boolean =>
-    name === "gender" ? value === "true" : value;
+  const handleEmailAddress = (value: string): string => {
+    if (!emailPattern.test(value)) {
+      setErrorMessage("Please enter a valid email address.");
+    } else {
+      setErrorMessage("");
+    }
+
+    return value;
+  };
+
+  const handleValue = (name: string, value: string): string | boolean => {
+    switch (name) {
+      case "gender":
+        return handleGender(value);
+
+      case "emailAddress":
+        return handleEmailAddress(value);
+
+      default:
+        return value;
+    }
+  };
+
+  const handleGender = (value: string): string | boolean => value === "true";
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: handleGender(name, value),
+      [name]: handleValue(name, value),
     }));
   };
 
@@ -164,7 +189,7 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
           </label>
         </div>
         <div className="flex flex-col">
-          <label>Email</label>
+          <label>Email Address</label>
           <input
             name="emailAddress"
             value={formData.emailAddress}
@@ -172,6 +197,9 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
             className="outline-none border rounded-lg bg-transparent p-2"
             type="email"
           />
+          {errorMessage && (
+            <p className="text-red-500 text-sm pt-1">{errorMessage}</p>
+          )}
         </div>
         <div className="flex flex-col">
           <label>Address</label>
