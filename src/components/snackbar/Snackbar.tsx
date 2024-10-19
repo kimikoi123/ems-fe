@@ -7,6 +7,7 @@ interface SnackbarProps {
   isOpen: boolean;
   onClose: () => void;
   duration?: number;
+  isError?: boolean;
 }
 
 const Snackbar: React.FC<SnackbarProps> = ({
@@ -14,6 +15,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
   isOpen,
   onClose,
   duration = 3000,
+  isError = false,
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -27,8 +29,12 @@ const Snackbar: React.FC<SnackbarProps> = ({
 
   if (!isOpen) return null;
 
+  const backgroundColor = isError ? "bg-red-500" : "bg-green-500";
+
   return (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg transition-all">
+    <div
+      className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 ${backgroundColor} text-white px-4 py-2 rounded shadow-lg transition-all`}
+    >
       {message}
     </div>
   );

@@ -59,7 +59,7 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
   const handleGender = (value: string): boolean => value === "true";
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({

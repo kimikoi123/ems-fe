@@ -2,12 +2,18 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Snackbar from "@/components/snackbar/Snackbar";
+import axios from "axios";
+import { API_CONFIG } from "../constants/config";
 
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -21,15 +27,34 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSnackbarClose = () => {
+    setIsSnackbarOpen(false);
+    setIsError(false);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (isEmailValid && password) {
-      //TODO: Implement auth validation
-      router.push("/user");
+      try {
+        const response = await axios.post(`${API_CONFIG.url}/login`, {
+          username: email,
+          password: password,
+        });
+
+        const data = response.data;
+        //Save token
+        router.push("/user");
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        setSnackbarMessage("Login failed");
+        setIsSnackbarOpen(true);
+        setIsError(true);
+      }
     } else {
-      //TODO: Implement password fail styling
-      console.log("Invalid email or password");
+      setSnackbarMessage("Invalid email or password");
+      setIsSnackbarOpen(true);
+      setIsError(true);
     }
   };
 
@@ -37,7 +62,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="email"
@@ -74,7 +99,6 @@ const Login = () => {
           </div>
           <div className="flex items-center justify-between">
             <div className="text-sm">
-              {/* TODO: Add functionality */}
               <a
                 href="#"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
@@ -86,8 +110,6 @@ const Login = () => {
           <div>
             <button
               type="submit"
-              onClick={handleSubmit}
-              disabled={!email && !password}
               className={`w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                 !email || !password
                   ? "bg-gray-400 text-gray-600 cursor-not-allowed"
@@ -99,6 +121,14 @@ const Login = () => {
           </div>
         </form>
       </div>
+
+      <Snackbar
+        message={snackbarMessage}
+        isOpen={isSnackbarOpen}
+        onClose={handleSnackbarClose}
+        duration={3000}
+        isError={isError}
+      />
     </div>
   );
 };
