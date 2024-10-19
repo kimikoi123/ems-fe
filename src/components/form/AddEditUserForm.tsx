@@ -4,7 +4,8 @@ import { API_CONFIG } from "@/app/constants/config";
 import { User } from "@/app/interfaces/user";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import Snackbar from "../snackbar/Snackbar";
+import Spinner from "../spinner/Spinner";
 interface AddEditUserFormProps {
   user?: User;
 }
@@ -24,24 +25,14 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
     role: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [snackbar, setSnackbar] = useState({ isOpen: false, message: "" });
+  const [loading, setLoading] = useState(false); // Loading state
 
   const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 
   useEffect(() => {
     if (user) {
-      setFormData({
-        id: user.id || 0,
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        middleName: user.middleName || "",
-        preferredName: user.preferredName || "",
-        phoneNumber: user.phoneNumber || "",
-        dateOfBirth: user.dateOfBirth || "",
-        gender: user.gender || true,
-        emailAddress: user.emailAddress || "",
-        homeAddress: user.homeAddress || "",
-        role: user.role || "",
-      });
+      setFormData({ ...user });
     }
   }, [user]);
 
@@ -51,7 +42,6 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
     } else {
       setErrorMessage("");
     }
-
     return value;
   };
 
@@ -59,22 +49,19 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
     switch (name) {
       case "gender":
         return handleGender(value);
-
       case "emailAddress":
         return handleEmailAddress(value);
-
       default:
         return value;
     }
   };
 
-  const handleGender = (value: string): string | boolean => value === "true";
+  const handleGender = (value: string): boolean => value === "true";
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-
     setFormData((prevData) => ({
       ...prevData,
       [name]: handleValue(name, value),
@@ -82,25 +69,60 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
   };
 
   const handleAddUser = async (): Promise<void> => {
-    await axios.post(`${API_CONFIG.url}/users`, formData);
+    setLoading(true);
+    try {
+      await axios.post(`${API_CONFIG.url}/users`, formData);
+      handleSnackbar("User created successfully!");
+      resetForm();
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEditUser = async (): Promise<void> => {
-    await axios.put(`${API_CONFIG.url}/user/${formData.id}`, formData);
-  };
-
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-
-    if (formData.id === 0) {
-      return handleAddUser();
+    setLoading(true);
+    try {
+      await axios.put(`${API_CONFIG.url}/user/${formData.id}`, formData);
+      handleSnackbar("User updated successfully!");
+    } finally {
+      setLoading(false);
     }
-
-    handleEditUser();
   };
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    if (formData.id === 0) {
+      await handleAddUser();
+    } else {
+      await handleEditUser();
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      id: 0,
+      firstName: "",
+      lastName: "",
+      middleName: "",
+      preferredName: "",
+      phoneNumber: "",
+      dateOfBirth: "",
+      gender: true,
+      emailAddress: "",
+      homeAddress: "",
+      role: "",
+    });
+  };
+
+  const handleSnackbar = (message: string) => {
+    setSnackbar({ isOpen: true, message });
+  };
+
+  const closeSnackbar = () => setSnackbar({ isOpen: false, message: "" });
 
   return (
-    <div>
+    <div className="relative">
+      <Spinner isVisible={loading} message="Saving..." />
       <h1 className="font-semibold mt-4">Details</h1>
       <form className="grid grid-cols-2 pt-4 gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col">
@@ -112,6 +134,7 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
             className="outline-none border rounded-lg bg-transparent p-2"
             type="text"
             required
+            disabled={loading}
           />
         </div>
         <div className="flex flex-col">
@@ -123,6 +146,7 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
             className="outline-none border rounded-lg bg-transparent p-2"
             type="text"
             required
+            disabled={loading}
           />
         </div>
         <div className="flex flex-col">
@@ -229,12 +253,21 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
         </div>
 
         <button
-          className="bg-indigo-500 text-white p-2 rounded-lg font-semibold col-span-full"
+          className={`bg-indigo-500 text-white p-2 rounded-lg font-semibold col-span-full ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           type="submit"
+          disabled={loading}
         >
-          {user ? "Update" : "Add"}
+          {loading ? "Saving..." : user ? "Update" : "Add"}
         </button>
       </form>
+
+      <Snackbar
+        message={snackbar.message}
+        isOpen={snackbar.isOpen}
+        onClose={closeSnackbar}
+      />
     </div>
   );
 };
