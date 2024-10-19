@@ -13,7 +13,9 @@ const UserCard: React.FC<UserCardProps> = ({ userData }) => {
         <h1 className="text-lg font-bold">
           {userData.firstName} {userData.lastName}
         </h1>
-        <div>Employee #{userData.id}</div>
+        <div>
+          {userData.role} ({userData.id})
+        </div>
         <div>{userData.emailAddress}</div>
         <div>{userData.phoneNumber}</div>
       </div>

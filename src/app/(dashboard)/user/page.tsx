@@ -1,11 +1,10 @@
 "use client";
 
-import { API_CONFIG } from "@/app/constants/config";
-import { User } from "@/app/interfaces/user";
-import axios from "axios";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import getAxiosClient from "@/services/axiosInstance";
 import UserCard from "@/components/card/userCard/UserCard";
+import { User } from "@/app/interfaces/user";
 
 const UserPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -14,8 +13,9 @@ const UserPage: React.FC = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
+      const axiosClient = getAxiosClient();
       try {
-        const response = await axios.get(`${API_CONFIG.url}/users`);
+        const response = await axiosClient.get("/users");
         setUsers(response.data);
         setLoading(false);
       } catch (error) {

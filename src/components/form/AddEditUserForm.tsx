@@ -1,8 +1,7 @@
 "use client";
 
-import { API_CONFIG } from "@/app/constants/config";
 import { User } from "@/app/interfaces/user";
-import axios from "axios";
+import getAxiosClient from "@/services/axiosInstance";
 import React, { useEffect, useState } from "react";
 import Snackbar from "../snackbar/Snackbar";
 import Spinner from "../spinner/Spinner";
@@ -70,8 +69,10 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
 
   const handleAddUser = async (): Promise<void> => {
     setLoading(true);
+    const axiosClient = getAxiosClient();
     try {
-      await axios.post(`${API_CONFIG.url}/users`, formData);
+      await axiosClient.post("/users", formData);
+
       handleSnackbar("User created successfully!");
       resetForm();
     } finally {
@@ -81,8 +82,9 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
 
   const handleEditUser = async (): Promise<void> => {
     setLoading(true);
+    const axiosClient = getAxiosClient();
     try {
-      await axios.put(`${API_CONFIG.url}/user/${formData.id}`, formData);
+      await axiosClient.put(`/user/${formData.id}`, formData);
       handleSnackbar("User updated successfully!");
     } finally {
       setLoading(false);
@@ -246,9 +248,9 @@ const AddEditUserForm: React.FC<AddEditUserFormProps> = ({ user }) => {
             <option value="" disabled>
               -- Select an option --
             </option>
-            <option value="admin">Administrator</option>
-            <option value="employee">Employee</option>
-            <option value="candidate">Candidate</option>
+            <option value="ADMIN">Administrator</option>
+            <option value="EMPLOYEE">Employee</option>
+            <option value="CANDIDATE">Candidate</option>
           </select>
         </div>
 

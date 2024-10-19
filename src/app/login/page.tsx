@@ -41,10 +41,7 @@ const Login = () => {
           username: email,
           password: password,
         });
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const data = response.data;
-        //Save token
+        sessionStorage.setItem("ACCESS_TOKEN", response.data.token);
         router.push("/user");
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {

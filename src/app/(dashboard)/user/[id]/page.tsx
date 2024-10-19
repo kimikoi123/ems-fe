@@ -4,9 +4,8 @@ import React, { useEffect, useState } from "react";
 
 import AddEditUserForm from "@/components/form/AddEditUserForm";
 import { User } from "@/app/interfaces/user";
-import axios from "axios";
-import { API_CONFIG } from "@/app/constants/config";
 import { useParams } from "next/navigation";
+import getAxiosClient from "@/services/axiosInstance";
 
 const EditUser = () => {
   const [user, setUser] = useState<User>();
@@ -16,10 +15,9 @@ const EditUser = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
+      const axiosClient = getAxiosClient();
       try {
-        const response = await axios.get(
-          `${API_CONFIG.url}/user/${params?.id}`,
-        );
+        const response = await axiosClient.get(`/user/${params?.id}`);
         setUser(response.data);
         setLoading(false);
       } catch (error) {
