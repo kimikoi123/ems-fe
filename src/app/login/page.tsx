@@ -42,6 +42,7 @@ const Login = () => {
           password: password,
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const data = response.data;
         //Save token
         router.push("/user");
