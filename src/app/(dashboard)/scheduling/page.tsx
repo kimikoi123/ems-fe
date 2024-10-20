@@ -161,7 +161,7 @@ const SCHEDULING: React.FC = () => {
     if (currentEvent) {
       const axiosClient = getAxiosClient();
       try {
-        await axiosClient.delete(`/schedules/${currentEvent.id}`); // Adjust the endpoint as needed
+        await axiosClient.delete(`/schedules/${currentEvent.id}`);
         setEvents((prev) =>
           prev.filter((event) => event.id !== currentEvent.id)
         );
